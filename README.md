@@ -48,5 +48,7 @@ Clicando na rota disponibilizada, a IDE irá executar nosso projeto.
 2. No arquivo Calculos.xlsx as únicas informações que você poderá alterar serão as colunas com as descrições das despesas, os nomes dos moradores e os números de apto. Recomendo não adicionar novas linhas ou colunas, porém, caso seja feito, deverá adaptar para o pandas fazer a leitura dessas novas linhas/colunas.
 
 3. Apos utilizar o programa, no arquivo Gera_Faturas.xlsm, bastará clicar no botão 'Gerar Faturas' para que a macro filtre somente as informações contendo valor maior que zero, gerando assim as faturas. 
+
+4. Caso esse script não funcione, verifique, além das dependencias contidas em requirements, se a versão do chromedriver desse repositório é compatível com a versão do Chrome que você está utilizando, versão do Windows e plataforma x86 ou x64
 ------------
 Feito com ♥ por Alan Garmatter. [Visite meu LinkedIn](https://www.linkedin.com/in/alan-garmatter-8a05601b8/)! 👋 
