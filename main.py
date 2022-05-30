@@ -61,6 +61,7 @@ def define_competencia():
     novo_condominio_df = read_excel()
 
     data_atual = datetime.now()
+    # aqui faremos uma conversao do mes (numeral) para mes (por extenso)
     mes_ext = {1: 'jan', 2: 'fev', 3: 'mar', 4: 'abr', 5: 'mai', 6: 'jun',
                7: 'jul', 8: 'ago', 9: 'set', 10: 'out', 11: 'nov', 12: 'dez'}
     mes_atual = data_atual.strftime('%m/%Y')
@@ -80,8 +81,7 @@ def define_competencia():
 def fechar_janela(janela):
     janela.destroy()
 
-# aqui, além de gravar o saldo de um morador na tabela, vai gravar um balancete num bloco de notas com
-# o lançamento do saldo, a subtração das despesas e o saldo final
+# função que grava o saldo do morador na tabela
 def lanca_saldo(nomecondomino, saldo):
     saldo = float(saldo)
     novo_condominio_df = read_excel()
@@ -115,10 +115,11 @@ def aplica_despesa_morador(morador, despesa, valor):
     tk.messagebox.showinfo("App Edificio Guanabara",
                            "Ok, despesa específica lançada com sucesso!")
     
-    
+# nesta funcao iremos gravar um histórico dos lançamentos de despesas e saldo de cada morador 
+# no arquivo historico.txt antes de encerrar o programa, se o usuario desejar
 def grava_historico():
-
     data_atual = datetime.now()
+    # aqui faremos uma conversao do mes (numeral) para mes (por extenso)
     mes_ext = {1: 'jan', 2: 'fev', 3: 'mar', 4: 'abr', 5: 'mai', 6: 'jun',
                7: 'jul', 8: 'ago', 9: 'set', 10: 'out', 11: 'nov', 12: 'dez'}
     mes_atual = data_atual.strftime('%m/%Y')
@@ -132,7 +133,8 @@ def grava_historico():
         
         saldo = novo_condominio_df.loc[novo_condominio_df['Condômino']
                                 == morador, 'Saldo']
-        saldo = float(saldo)        
+        saldo = float(saldo)       
+        # caso haja algum saldo lançado, iremos gravar no histórico 
         if saldo != 0:        
             file = codecs.open("historico.txt", "a", encoding="cp1252")
             file.write(f'{morador} - Lançado saldo de {neg(saldo)} - mes: {mes}\n')
@@ -154,7 +156,7 @@ def grava_historico():
                 saldo += float(despesa)
                 file.close()
             n_despesa += 1
-        # aqui iremos gravar no bloco de notas o saldo final do morador
+        # aqui iremos gravar no bloco de notas o saldo final do morador, caso ainda haja saldo
         if saldo < 0:
             file = codecs.open("historico.txt", "a", encoding="cp1252")
             file.write(f'{morador} - Saldo atualizado: {neg(saldo)} - mês: {mes}\n')
