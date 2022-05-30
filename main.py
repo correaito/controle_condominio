@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ANCHOR, Entry, ttk, Label
-from tkinter.tix import Tk
+from tkinter.tix import ExFileSelectBox, Tk
 from tkinter import messagebox
 import time
 from datetime import datetime
@@ -23,8 +23,23 @@ def read_excel():
 
 # mensagem de confirmação ao fechar o programa
 def ao_fechar():
-    if messagebox.askokcancel("Sair?", "Tem certeza que deseja sair?"):
-        sys.exit()
+    janela_sair = tk.Tk()
+    janela_sair.title("Antes de Sair")
+
+    texto_label = Label(janela_sair, text="Deseja salvar o Histórico? Clique em Sim ou Não", bg='black', fg='white', relief='solid')
+    texto_label.grid(row=0, column=0, padx=10, pady=10,sticky='nsew', columnspan=2)
+
+    botao_continuar = tk.Button(
+        janela_sair, text="Sim", command=grava_historico, bg='green', fg='white', relief='solid')
+    botao_continuar.grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
+
+    botao_sair = tk.Button(
+        janela_sair, text="Não", command=finaliza_programa)
+    botao_sair.grid(row=2, column=1, padx=10, pady=10, sticky='nsew')
+    janela_sair.mainloop()
+    
+def finaliza_programa():
+    sys.exit()
 
 # essa funcao vai zerar todas as despesas e saldos da planilha
 def limpar_linhas():
@@ -69,48 +84,14 @@ def fechar_janela(janela):
 # o lançamento do saldo, a subtração das despesas e o saldo final
 def lanca_saldo(nomecondomino, saldo):
     saldo = float(saldo)
-
-    data_atual = datetime.now()
-    mes_ext = {1: 'jan', 2: 'fev', 3: 'mar', 4: 'abr', 5: 'mai', 6: 'jun',
-               7: 'jul', 8: 'ago', 9: 'set', 10: 'out', 11: 'nov', 12: 'dez'}
-    mes_atual = data_atual.strftime('%m/%Y')
-    mes, ano = mes_atual.split("/")
-    mes = '{}/{}'.format(mes_ext[int(mes)], ano)
-
     novo_condominio_df = read_excel()
     lista_condominos = [novo_condominio_df.iloc[i, 0] for i in range(6)]
 
     for morador in lista_condominos:
         if nomecondomino in morador:
-            # no bloco de notas, vamos escrever o saldo que estamos lançando para o morador
-            file = codecs.open("notas.txt", "a", encoding="cp1252")
-            file.write(
-                f'\n\n{morador} - Lançado saldo de {saldo} - mes: {mes}\n')
-            file.close()
             # aqui vamos lançar o saldo do morador na tabela
             novo_condominio_df.loc[novo_condominio_df['Condômino']
                                    == morador, 'Saldo'] = neg(float(saldo))
-
-            lista_despesas = list(novo_condominio_df.columns)
-
-            # aqui vamos repassar por todas as despesas da tabela (uma a uma)
-            # e se houver alguma despesa (maior que zero) iremos escrever no bloco de notas
-            n_despesa = 1
-            while n_despesa <= 8:
-                despesa = novo_condominio_df.loc[novo_condominio_df['Condômino']
-                                                 == morador, lista_despesas[n_despesa]].item()
-                if despesa > 0:
-                    file = codecs.open("notas.txt", "a", encoding="cp1252")
-                    file.write(
-                        f'{morador} - Subtraido {despesa} referente {lista_despesas[n_despesa]} - mês: {mes}\n')
-                    # aqui vamos subtrair as despesas do saldo
-                    saldo -= float(despesa)
-                    file.close()
-                n_despesa += 1
-            # aqui iremos gravar no bloco de notas o saldo final do morador
-            file = codecs.open("notas.txt", "a", encoding="cp1252")
-            file.write(f'{morador} - Saldo atualizado: {saldo} - mês: {mes}\n')
-            file.close()
     # e aqui exportamos para excel
     novo_condominio_df.to_excel('Calculos.xlsx')
 
@@ -133,6 +114,55 @@ def aplica_despesa_morador(morador, despesa, valor):
     janela_finalizacao_desp_espec.withdraw()
     tk.messagebox.showinfo("App Edificio Guanabara",
                            "Ok, despesa específica lançada com sucesso!")
+    
+    
+def grava_historico():
+
+    data_atual = datetime.now()
+    mes_ext = {1: 'jan', 2: 'fev', 3: 'mar', 4: 'abr', 5: 'mai', 6: 'jun',
+               7: 'jul', 8: 'ago', 9: 'set', 10: 'out', 11: 'nov', 12: 'dez'}
+    mes_atual = data_atual.strftime('%m/%Y')
+    mes, ano = mes_atual.split("/")
+    mes = '{}/{}'.format(mes_ext[int(mes)], ano)
+
+    novo_condominio_df = read_excel()
+    lista_condominos = [novo_condominio_df.iloc[i, 0] for i in range(6)]
+
+    for morador in lista_condominos:
+        
+        saldo = novo_condominio_df.loc[novo_condominio_df['Condômino']
+                                == morador, 'Saldo']
+        saldo = float(saldo)        
+        if saldo != 0:        
+            file = codecs.open("historico.txt", "a", encoding="cp1252")
+            file.write(f'{morador} - Lançado saldo de {neg(saldo)} - mes: {mes}\n')
+            file.close()
+
+        lista_despesas = list(novo_condominio_df.columns)
+
+        # aqui vamos repassar por todas as despesas da tabela (uma a uma)
+        # e se houver alguma despesa (maior que zero) iremos escrever no bloco de notas
+        n_despesa = 1
+        while n_despesa <= 8:
+            despesa = novo_condominio_df.loc[novo_condominio_df['Condômino']
+                                                == morador, lista_despesas[n_despesa]].item()
+            if despesa > 0:
+                file = codecs.open("historico.txt", "a", encoding="cp1252")
+                file.write(
+                    f'{morador} - Despesa de {despesa} referente {lista_despesas[n_despesa]} - mês: {mes}\n')
+                # aqui vamos subtrair as despesas do saldo
+                saldo += float(despesa)
+                file.close()
+            n_despesa += 1
+        # aqui iremos gravar no bloco de notas o saldo final do morador
+        if saldo < 0:
+            file = codecs.open("historico.txt", "a", encoding="cp1252")
+            file.write(f'{morador} - Saldo atualizado: {neg(saldo)} - mês: {mes}\n')
+            file.close()
+        file = codecs.open("historico.txt", "a", encoding="cp1252")
+        file.write(f'\n')
+        file.close()
+    sys.exit()
 
 
 def pegar_valor_copel():
