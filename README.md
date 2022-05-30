@@ -1,5 +1,5 @@
-<h1 align="center">Aplicativo de Vendas</h1>
-<h4 align="center">Projeto desenvolvido com intuito de Aprendizado .</h4>
+<h1 align="center">Programa Controle de Contas para Condomínio</h1>
+<h4 align="center">Projeto desenvolvido para reforço de aprendizado em Python.</h4>
 
 <p align="center">
 <a href="#tecnologias"> Tecnologias</a> | <a href="#informacao-uso">Como Usar</a>
