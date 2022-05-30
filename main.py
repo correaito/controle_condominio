@@ -354,7 +354,7 @@ def triagem():
         ao_fechar()
 
 
-# Janela principal com o Menu de Opções
+# Janela Principal com o Menu de Opções
 janela_escolha = tk.Tk()
 janela_escolha.title("Edificio Guanabara")
 
