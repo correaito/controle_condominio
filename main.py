@@ -166,6 +166,38 @@ def grava_historico():
         file.close()
     sys.exit()
 
+# nesta função vamos gravar em histórico.txt o pagamento realizado pelo morador
+# e caso haja saldo, positivo ou negativo, iremos evidencia-lo
+def lanca_pagamento(morador, valorpgto, competencia):
+    novo_condominio_df = read_excel()
+    lista_condominos = [novo_condominio_df.iloc[i, 0] for i in range(6)]
+    lista_despesas = list(novo_condominio_df.columns)
+    
+    for moradores in lista_condominos:
+        if morador in moradores:
+            total_despesa = 0            
+            n_despesa = 1
+            while n_despesa <= 9:
+                despesa = novo_condominio_df.loc[novo_condominio_df['Condômino'] == moradores, lista_despesas[n_despesa]].item()
+                n_despesa += 1
+                total_despesa += despesa
+    saldo_final = total_despesa - float(valorpgto)
+    
+    file = codecs.open("historico.txt", "a", encoding="cp1252")
+    file.write(f'{morador} - Pagamento de: {valorpgto} - competência: {competencia}\n')
+    if saldo_final < 0:
+        file.write(f'{morador} tem um saldo positivo de {neg(saldo_final)} para o próximo mês\n\n')
+    elif saldo_final > 0:
+        file.write(f'{morador} está devendo {saldo_final} para o próximo mês\n\n')
+    elif saldo_final == 0:
+        file.write(f'{morador} não tem saldo para o próximo mês\n\n')
+    
+    janela_finalizacao_pgto = tk.Tk()
+    janela_finalizacao_pgto.withdraw()
+    tk.messagebox.showinfo("App Edificio Guanabara",
+                           "Ok, pagamento lançado com sucesso!")
+
+            
 
 def pegar_valor_copel():
     janela_escolha.update()
@@ -345,12 +377,58 @@ def triagem():
         
         botao_sair_saldo = tk.Button(
         janela_saldo, text="Sair", command=lambda: fechar_janela(janela_saldo))
-        botao_sair_saldo.grid(row=4, column=2, padx=10, pady=10, sticky='nsew')        
+        botao_sair_saldo.grid(row=4, column=2, padx=10, pady=10, sticky='nsew')
     elif escolha == '5':
-        define_competencia()
+        # tela de lançamento do PAGAMENTO      
+        janela_pagamento = tk.Toplevel()
+        janela_pagamento.title('Lançar Pagamento')
+        texto_label = Label(janela_pagamento, text="Escolha uma Morador para Lançar Pagamento",
+                            borderwidth=2, relief='solid', fg='white', bg='black')
+        texto_label.grid(row=0, column=0, padx=10, pady=10,
+                         sticky='nsew', columnspan=3)
+
+        campo_morador_saldo = Label(janela_pagamento, text='Morador')
+        campo_morador_saldo.grid(
+            row=1, column=0, padx=10, pady=10, sticky='nsew')
+
+        novo_condominio_df = read_excel()
+        lista_despesas = list(novo_condominio_df.columns)
+        lista_condominos = [novo_condominio_df.iloc[i, 0] for i in range(6)]
+
+        combobox_selecionar_morador_pagamento = ttk.Combobox(
+            janela_pagamento, values=lista_condominos)
+        combobox_selecionar_morador_pagamento.grid(
+            row=1, column=1, padx=10, pady=10, sticky='nsew', ipadx=40, columnspan=2)
+
+        campo_valor_label = Label(janela_pagamento, text='Valor do Pagamento')
+        campo_valor_label.grid(row=3, column=0, padx=10,
+                               pady=10, sticky='nsew')
+
+        campo_valor_pagamento = tk.Entry(janela_pagamento)
+        campo_valor_pagamento.grid(row=3, column=1, padx=10,
+                               pady=10, sticky='nsew', columnspan=2)
+        
+        campo_valor_label_compt = Label(janela_pagamento, text='Competência')
+        campo_valor_label_compt.grid(row=4, column=0, padx=10,
+                               pady=10, sticky='nsew')
+
+        campo_valor_competencia = tk.Entry(janela_pagamento)
+        campo_valor_competencia.grid(row=4, column=1, padx=10,
+                               pady=10, sticky='nsew', columnspan=2)
+
+        botao_lanca_pagamento = tk.Button(
+        janela_pagamento, text="Processar", bg='green', fg='white', relief='solid', command=lambda: lanca_pagamento(combobox_selecionar_morador_pagamento.get(), campo_valor_pagamento.get(), campo_valor_competencia.get()))
+        botao_lanca_pagamento.grid(row=5, column=1, padx=3, pady=10, sticky='e', ipadx=30)
+        
+        botao_sair_pagamento = tk.Button(
+        janela_pagamento, text="Sair", command=lambda: fechar_janela(janela_pagamento))
+        botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')     
+          
     elif escolha == '6':
-        limpar_linhas()
+        define_competencia()
     elif escolha == '7':
+        limpar_linhas()
+    elif escolha == '8':
         ao_fechar()
 
 
@@ -362,9 +440,10 @@ despesas = ['1. Pegar Valor Copel',
             '2. Lançar Despesa Geral',
             '3. Lançar Despesa Específica',
             '4. Lançar Saldo para Morador', 
-            '5. Lançar Competência (automático)', 
-            '6. Limpar Planilha ',
-            '7. Sair']
+            '5. Lançar Pagamento', 
+            '6. Lançar Competência (automático)',
+            '7. Limpar Linhas',
+            '8. Sair do Programa']
 
 texto_label = Label(janela_escolha, text="Escolha uma das opções abaixo",
                     relief='solid', fg='white', bg='black')
@@ -382,11 +461,11 @@ linha += 1
 
 botao_continuar = tk.Button(
     janela_escolha, text="Processar", command=triagem, bg='green', fg='white', relief='solid')
-botao_continuar.grid(row=9, column=0, padx=3, pady=10, sticky='e', ipadx=25)
+botao_continuar.grid(row=10, column=0, padx=3, pady=10, sticky='e', ipadx=25)
 
 botao_sair = tk.Button(
     janela_escolha, text="Sair", command=ao_fechar)
-botao_sair.grid(row=linha, column=1, padx=10, pady=10, sticky='nsew', ipadx=20)
+botao_sair.grid(row=10, column=1, padx=10, pady=10, sticky='nsew', ipadx=20)
 janela_escolha.protocol("WM_DELETE_WINDOW", ao_fechar)
 
 janela_escolha.mainloop()
