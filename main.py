@@ -137,7 +137,7 @@ def grava_historico():
         # caso haja algum saldo lançado, iremos gravar no histórico 
         if saldo != 0:        
             file = codecs.open("historico.txt", "a", encoding="cp1252")
-            file.write(f'{morador} - Lançado saldo de {neg(saldo)} - mes: {mes}\n')
+            file.write(f'{morador} - Lançado saldo de R$ {neg(saldo)} - mes: {mes}\n')
             file.close()
 
         lista_despesas = list(novo_condominio_df.columns)
@@ -151,7 +151,7 @@ def grava_historico():
             if despesa > 0:
                 file = codecs.open("historico.txt", "a", encoding="cp1252")
                 file.write(
-                    f'{morador} - Despesa de {despesa} referente {lista_despesas[n_despesa]} - mês: {mes}\n')
+                    f'{morador} - Despesa de R$ {despesa} referente {lista_despesas[n_despesa]} - mês: {mes}\n')
                 # aqui vamos subtrair as despesas do saldo
                 saldo += float(despesa)
                 file.close()
@@ -159,7 +159,7 @@ def grava_historico():
         # aqui iremos gravar no bloco de notas o saldo final do morador, caso ainda haja saldo
         if saldo < 0:
             file = codecs.open("historico.txt", "a", encoding="cp1252")
-            file.write(f'{morador} - Saldo atualizado: {neg(saldo)} - mês: {mes}\n')
+            file.write(f'{morador} - Saldo atualizado: R$ {neg(saldo)} - mês: {mes}\n')
             file.close()
         file = codecs.open("historico.txt", "a", encoding="cp1252")
         file.write(f'\n')
@@ -184,11 +184,11 @@ def lanca_pagamento(morador, valorpgto, competencia):
     saldo_final = total_despesa - float(valorpgto)
     
     file = codecs.open("historico.txt", "a", encoding="cp1252")
-    file.write(f'{morador} - Pagamento de: {valorpgto} - competência: {competencia}\n')
+    file.write(f'{morador} - Pagamento de R$ {valorpgto} - competência: {competencia}\n')
     if saldo_final < 0:
-        file.write(f'{morador} tem um saldo positivo de {neg(saldo_final)} para o próximo mês\n\n')
+        file.write(f'{morador} tem um saldo positivo de R$ {neg(saldo_final)} para o próximo mês\n\n')
     elif saldo_final > 0:
-        file.write(f'{morador} está devendo {saldo_final} para o próximo mês\n\n')
+        file.write(f'{morador} está devendo R$ {saldo_final} para o próximo mês\n\n')
     elif saldo_final == 0:
         file.write(f'{morador} não tem saldo para o próximo mês\n\n')
     
