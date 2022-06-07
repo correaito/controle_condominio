@@ -424,12 +424,7 @@ def triagem():
         
         botao_sair_pagamento = tk.Button(
         janela_pagamento, text="Sair", command=lambda: fechar_janela(janela_pagamento))
-<<<<<<< HEAD
-        botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')          
-=======
-        botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')     
-          
->>>>>>> 881c1802a146e32b846ad8fa3684ea0ba90d6570
+        botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')
     elif escolha == '6':
         define_competencia()
     elif escolha == '7':
