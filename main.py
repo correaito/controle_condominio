@@ -194,14 +194,13 @@ def lanca_pagamento(morador, valorpgto, competencia):
     elif saldo_final == 0:
         file.write(f'{morador} não tem saldo para o próximo mês\n\n')
         file.close()
-        
     
     janela_finalizacao_pgto = tk.Tk()
     janela_finalizacao_pgto.withdraw()
     tk.messagebox.showinfo("App Edificio Guanabara",
-                           "Ok, pagamento lançado com sucesso!")            
+                           "Ok, pagamento lançado com sucesso!")
 
-
+            
 def pegar_valor_copel():
     janela_escolha.update()
     # escondendo a tela do console do webdriver
@@ -214,11 +213,11 @@ def pegar_valor_copel():
     driver.get("https://avanl.copel.com/avaweb/paginas/consultaDebitos.jsf")
     time.sleep(1)
     login = driver.find_element_by_xpath(
-        '//*[@id="formulario:numDoc"]').send_keys('46763821972')
+        '//*[@id="formulario:numDoc"]').send_keys('usuario')
     senha = driver.find_element_by_xpath('//*[@id="formulario:pass"]').click()
     time.sleep(2)
     senha = driver.find_element_by_xpath(
-        '//*[@id="formulario:pass"]').send_keys('ae6os3it')
+        '//*[@id="formulario:pass"]').send_keys('senha')
     time.sleep(1)
     driver.find_elements_by_tag_name('button')[0].click()
     driver.find_element_by_id('formLogin:tbUcs:1:j_idt50').click()
@@ -249,7 +248,6 @@ def aplica_despesa_geral(despesa, valor):
     janela_finalizacao_desp_geral.withdraw()
     tk.messagebox.showinfo("App Edificio Guanabara",
                            "Ok, despesa geral lançada com sucesso!")
-    
 
 # essa funcao é responsavel por capturar o nr da tela que o usuario quer acessar
 # essas telas (toplevel) por sua vez, irão trabalhar com as funcoes acima
@@ -426,7 +424,12 @@ def triagem():
         
         botao_sair_pagamento = tk.Button(
         janela_pagamento, text="Sair", command=lambda: fechar_janela(janela_pagamento))
+<<<<<<< HEAD
         botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')          
+=======
+        botao_sair_pagamento.grid(row=5, column=2, padx=10, pady=10, sticky='nsew')     
+          
+>>>>>>> 881c1802a146e32b846ad8fa3684ea0ba90d6570
     elif escolha == '6':
         define_competencia()
     elif escolha == '7':
