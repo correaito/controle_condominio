@@ -41,7 +41,7 @@ Agora, para executar o script, dentro do PyCharm, abra o arquivo main.py, clique
 ### :loudspeaker:  Observações
 ------------
 
-1. Nas linhas 182/186 do arquivo main.py, em send_keys é necessário alterar 'usuário/senha' para suas credenciais de acesso à area de cliente da Copel. Se você for usuário de outra cia (Eletrobrás, Eletropaulo, etc), a function 'pegar_valor_copel' não irá funcionar e deverá ser adaptado para o portal da sua região. 
+1. Nas linhas 182/186 do arquivo main.py, em send_keys é necessário alterar 'usuário/senha' para suas credenciais de acesso à area de cliente da Copel. Se você for usuário de outra cia (Cesp, Light, etc), a function 'pegar_valor_copel' não irá funcionar e deverá ser adaptado para o portal da sua região. 
 
 2. No arquivo Calculos.xlsx as únicas informações que você poderá alterar serão as colunas com as descrições das despesas, os nomes dos moradores e os números de apto. Recomendo não adicionar novas linhas ou colunas, porém, caso seja feito, deverá adaptar para o pandas fazer a leitura dessas novas linhas/colunas.
 
