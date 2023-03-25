@@ -49,4 +49,4 @@ Agora, para executar o script, dentro do PyCharm, abra o arquivo main.py, clique
 
 4. Caso esse script não funcione, verifique, além das dependencias contidas em requirements.txt, se a versão do chromedriver desse repositório é compatível com a versão do Chrome que você está utilizando, versão do Windows e plataforma x86 ou x64
 ------------
-Feito com ♥ por Alan Garmatter. [Visite meu LinkedIn](https://www.linkedin.com/in/alan-garmatter-8a05601b8/)! 👋 
+Feito com ♥ por Alan Garmatter 👋 
