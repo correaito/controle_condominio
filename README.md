@@ -1,5 +1,5 @@
-<h1 align="center">Controle de Contas para Condomínio</h1>
-<h4 align="center">Projeto desenvolvido para reforço de aprendizado em Python.</h4>
+<h1 align="center">CondoAccountPro</h1>
+<h4 align="center">Sistema de gerenciamento de contas de condomínio para finalidade de estudo e treinamento em Python.</h4>
 
 <p align="center">
 <a href="#tecnologias"> Tecnologias</a> | <a href="#informacao-uso">Como Usar</a>
